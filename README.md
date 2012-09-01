@@ -9,3 +9,9 @@ npm install serve -g
 
 serve .
 ```
+
+# Browserify
+
+```shell
+make build
+```
