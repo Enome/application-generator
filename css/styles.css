@@ -19,6 +19,16 @@ pre {
   margin-bottom: 2em;
 }
 
+.footer {
+  margin-top: 2em;
+  text-align: center;
+}
+
+.footer a {
+  color: silver;
+  font-size: .85em;
+}
+
 .bundles {
   padding: 0;
   list-style-type: none;
