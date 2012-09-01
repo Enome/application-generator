@@ -1,6 +1,5 @@
 module.exports = [
   require('./express'),
   require('./http'),
-  require('./router'),
-  require('./session')
+  require('./router')
 ];

@@ -1,11 +1,10 @@
 body {
   font-family: 'Open Sans';           
-  padding: 0;
+  padding: 2em 0;
 }
 
 h1, h2 {
   font-weight: 300;
-  margin: 0;
 }
 
 h2 {
@@ -17,9 +16,6 @@ pre {
 }
 
 .header {
-  background-color: #323232;
-  padding: 20px;
-  color: white;
   margin-bottom: 2em;
 }
 

@@ -4,10 +4,6 @@ var controllers = {
 
   BundleCtrl: function ($scope) {
 
-    bundles.sort(function (a, b) {
-      return a.order > b.order;
-    });
-
     $scope.bundles = bundles;
 
     $scope.select = function (bundle) {
@@ -25,6 +21,13 @@ var controllers = {
 
       return '';
     };
+
+    for (var i = 0; i < $scope.bundles.length; i++) {
+      var current = $scope.bundles[i];
+      if (current.required) {
+        $scope.select(current);
+      }
+    }
 
   }
 

@@ -475,10 +475,6 @@ var controllers = {
 
   BundleCtrl: function ($scope) {
 
-    bundles.sort(function (a, b) {
-      return a.order > b.order;
-    });
-
     $scope.bundles = bundles;
 
     $scope.select = function (bundle) {
@@ -497,6 +493,13 @@ var controllers = {
       return '';
     };
 
+    for (var i = 0; i < $scope.bundles.length; i++) {
+      var current = $scope.bundles[i];
+      if (current.required) {
+        $scope.select(current);
+      }
+    }
+
   }
 
 };
@@ -507,65 +510,55 @@ module.exports = controllers;
 require.define("/bundles/index.js",function(require,module,exports,__dirname,__filename,process){module.exports = [
   require('./express'),
   require('./http'),
-  require('./router'),
-  require('./session')
+  require('./router')
 ];
 });
 
-require.define("/bundles/express.js",function(require,module,exports,__dirname,__filename,process){var bundle = {
-  order: 0,
-  required: true,
-  name: 'Express.js',
-  description: 'The framework',
-  code: '// Create the app \n' +
-        'var express = require("express"); \n' +
-        'var app = express();'
-};
+require.define("/bundles/express.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
 
-module.exports = bundle;
+  bundle = {
+    order: 0,
+    required: true,
+    name: 'The App',
+    description: "The express() function creates an application (app). \nEach project needs atleast one these",
+    code: "// The App\nvar express = require(\"express\");\nvar app = express();"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
 });
 
-require.define("/bundles/http.js",function(require,module,exports,__dirname,__filename,process){var bundle = {
-  order: 99,
-  required: true,
-  name: 'HTTP Server',
-  description: 'An Express.js app is a handler for a Node.js http server.',
-  code: '// Create a http server and listen to port 3000\n' +
-        'var http = require("http"); \n' +
-        'http.createServer(app).listen(3000)'
-};
+require.define("/bundles/http.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
 
-module.exports = bundle;
+  bundle = {
+    order: 99,
+    required: true,
+    name: 'HTTP Server',
+    description: 'Your app is a handler for a Node.js HTTP server.',
+    code: "// Create HTTP server with your app\nvar http = require(\"http\");\nvar server = http.createServer(app)\n\n// Listen to port 3000 \nserver.listen(3000);"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
 });
 
-require.define("/bundles/router.js",function(require,module,exports,__dirname,__filename,process){var bundle = {
-  order: 10,
-  name: 'Router',
-  description: 'The router middleware is middleware that can execute one or more middleware for a certain url/route',
-  code: '// Use the app.router middleware \n ' +
-        'app.use(app.router); \n\n ' +
-        '// Create a simple route\n ' +
-        'app.get("/", function (req, res) { \n' +
-        '  res.send("root"); \n' +
-        '});'
-};
+require.define("/bundles/router.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
 
-module.exports = bundle;
-});
+  bundle = {
+    order: 10,
+    name: 'Router',
+    description: "The app.router is middleware that can execute \none or more middleware for a certain url.",
+    code: "app.use(app.router);\n\n// Create a simple route\napp.get(\"/\", function (req, res) {\n  res.send(\"root\");\n});"
+  };
 
-require.define("/bundles/session.js",function(require,module,exports,__dirname,__filename,process){var bundle = {
-  order: 10,
-  name: 'Router',
-  description: 'The router middleware is middleware that can execute one or more middleware for a certain url/route',
-  code: '// Use the app.router middleware \n ' +
-        'app.use(app.router); \n\n ' +
-        '// Create a simple route\n ' +
-        'app.get("/", function (req, res) { \n' +
-        '  res.send("root"); \n' +
-        '});'
-};
+  module.exports = bundle;
 
-module.exports = bundle;
+}).call(this);
 });
 
 require.define("/directives.js",function(require,module,exports,__dirname,__filename,process){var directives = {
@@ -599,34 +592,14 @@ require.define("/directives.js",function(require,module,exports,__dirname,__file
 module.exports = directives;
 });
 
-require.define("/filters.js",function(require,module,exports,__dirname,__filename,process){var filters = {
-
-  selected: function () {
-    return function (input) {
-      if (input.selected) {
-        return input;
-      }
-    };
-  }
-
-};
-
-module.exports = filters;
-});
-
 require.define("/index.js",function(require,module,exports,__dirname,__filename,process){var controllers = require('./controllers');
 var directives = require('./directives');
-var filters = require('./filters');
 
 var app = angular.module('xgen', []);
 
 // Directives
 
 app.directive('popover', directives.popover);
-
-// Filters
-
-app.filter('selected', filters.selected);
 
 // Controllers
 
