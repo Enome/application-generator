@@ -1,5 +1,4 @@
 bundle = {
-  order: 2
   name: 'Cookies'
   link: 'http://www.senchalabs.org/connect/cookieParser.html'
   description: """

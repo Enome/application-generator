@@ -1,5 +1,4 @@
 bundle = {
-  order: 99
   required: true
   name: 'HTTP Server'
   description: 'Your app is a handler for a Node.js HTTP server.'

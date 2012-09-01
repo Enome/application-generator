@@ -494,7 +494,6 @@ var controllers = {
     };
 
     $scope.hasLink = function (bundle) {
-      console.log(bundle.link);
       return typeof bundle.link !== 'undefined';
     };
 
@@ -514,11 +513,12 @@ module.exports = controllers;
 
 require.define("/bundles/index.js",function(require,module,exports,__dirname,__filename,process){module.exports = [
   require('./express'),
-  require('./http'),
-  require('./router'),
+  require('./forms'),
+  require('./templates'),
   require('./cookies'),
   require('./sessions_cookie'),
-  require('./forms')
+  require('./router'),
+  require('./http'),
 ];
 });
 
@@ -526,7 +526,6 @@ require.define("/bundles/express.coffee",function(require,module,exports,__dirna
   var bundle;
 
   bundle = {
-    order: 0,
     required: true,
     name: 'The App',
     description: "The express() function creates an application (app). \nEach project needs atleast one these",
@@ -538,15 +537,14 @@ require.define("/bundles/express.coffee",function(require,module,exports,__dirna
 }).call(this);
 });
 
-require.define("/bundles/http.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+require.define("/bundles/forms.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
   var bundle;
 
   bundle = {
-    order: 99,
-    required: true,
-    name: 'HTTP Server',
-    description: 'Your app is a handler for a Node.js HTTP server.',
-    code: "// Create HTTP server with your app\nvar http = require(\"http\");\nvar server = http.createServer(app)\n\n// Listen to port 3000 \nserver.listen(3000);"
+    name: 'Forms',
+    link: 'http://expressjs.com/api.html#req.body',
+    description: "Parse request bodies, supports application/json,\napplication/x-www-form-urlencoded, and multipart/form-data.",
+    code: "// Use the bodyParser middleware.\napp.use(express.bodyParser());"
   };
 
   module.exports = bundle;
@@ -554,14 +552,14 @@ require.define("/bundles/http.coffee",function(require,module,exports,__dirname,
 }).call(this);
 });
 
-require.define("/bundles/router.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+require.define("/bundles/templates.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
   var bundle;
 
   bundle = {
-    order: 10,
-    name: 'Router',
-    description: "The app.router is middleware that can execute \none or more middleware for a certain url.",
-    code: "app.use(app.router);\n\n// Create a simple route\napp.get(\"/\", function (req, res) {\n  res.send(\"root\");\n});"
+    name: 'Templates (jade)',
+    link: 'http://jade-lang.com/',
+    description: "Jade is a high performance template engine heavily \ninfluenced by Haml and implemented with JavaScript \nfor node. ",
+    code: "// Set the view engine\napp.set('view engine', 'jade');\n\n// Set the directory that contains the views\napp.set('views', __dirname + '/views');"
   };
 
   module.exports = bundle;
@@ -573,7 +571,6 @@ require.define("/bundles/cookies.coffee",function(require,module,exports,__dirna
   var bundle;
 
   bundle = {
-    order: 2,
     name: 'Cookies',
     link: 'http://www.senchalabs.org/connect/cookieParser.html',
     description: "Parse Cookie header and populate req.cookies\nwith an object keyed by the cookie names. Optionally\nyou may enabled signed cookie support by passing\na secret string, which assigns req.secret so\nit may be used by other middleware.",
@@ -589,7 +586,6 @@ require.define("/bundles/sessions_cookie.coffee",function(require,module,exports
   var bundle;
 
   bundle = {
-    order: 3,
     link: 'http://www.senchalabs.org/connect/cookieSession.html',
     name: 'Sessions (cookies)',
     description: "This enables req.session for storing data outside\nthe request / response cycle. The cookie session \nmiddleware will store data inside a cookie.\n<br /><br />\n<strong>This depends on the cookieParse (Cookies) middleware.</strong>",
@@ -601,15 +597,28 @@ require.define("/bundles/sessions_cookie.coffee",function(require,module,exports
 }).call(this);
 });
 
-require.define("/bundles/forms.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+require.define("/bundles/router.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
   var bundle;
 
   bundle = {
-    order: 1,
-    name: 'Forms',
-    link: 'http://expressjs.com/api.html#req.body',
-    description: "Parse request bodies, supports application/json,\napplication/x-www-form-urlencoded, and multipart/form-data.",
-    code: "// Use the bodyParser middleware.\napp.use(express.bodyParser());"
+    name: 'Router',
+    description: "The app.router is middleware that can execute \none or more middleware for a certain url.",
+    code: "app.use(app.router);\n\n// Create a simple route\napp.get(\"/\", function (req, res) {\n  res.send(\"root\");\n});"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/http.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    required: true,
+    name: 'HTTP Server',
+    description: 'Your app is a handler for a Node.js HTTP server.',
+    code: "// Create HTTP server with your app\nvar http = require(\"http\");\nvar server = http.createServer(app)\n\n// Listen to port 3000 \nserver.listen(3000);"
   };
 
   module.exports = bundle;

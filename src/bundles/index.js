@@ -1,8 +1,9 @@
 module.exports = [
   require('./express'),
-  require('./http'),
-  require('./router'),
+  require('./forms'),
+  require('./templates'),
   require('./cookies'),
   require('./sessions_cookie'),
-  require('./forms')
+  require('./router'),
+  require('./http'),
 ];

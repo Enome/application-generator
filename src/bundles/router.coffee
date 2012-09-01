@@ -1,5 +1,4 @@
 bundle = {
-  order: 10
   name: 'Router'
 
   description: """

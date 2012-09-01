@@ -23,7 +23,6 @@ var controllers = {
     };
 
     $scope.hasLink = function (bundle) {
-      console.log(bundle.link);
       return typeof bundle.link !== 'undefined';
     };
 

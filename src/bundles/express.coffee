@@ -1,5 +1,4 @@
 bundle = {
-  order: 0
   required: true
   name: 'The App'
   description: """

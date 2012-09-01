@@ -1,5 +1,4 @@
 bundle = {
-  order: 3
   link: 'http://www.senchalabs.org/connect/cookieSession.html'
   name: 'Sessions (cookies)'
 

@@ -1,5 +1,4 @@
 bundle = {
-  order: 1
   name: 'Forms'
   link: 'http://expressjs.com/api.html#req.body'
   description: """
