@@ -1,5 +1,6 @@
 var controllers = require('./controllers');
 var directives = require('./directives');
+var filters = require('./filters');
 
 var app = angular.module('xgen', []);
 
@@ -7,11 +8,10 @@ var app = angular.module('xgen', []);
 
 app.directive('popover', directives.popover);
 
-// Services
+// Filters
 
-app.factory('events', require('./events'));
+app.filter('selected', filters.selected);
 
 // Controllers
 
 app.controller('BundleCtrl', controllers.BundleCtrl);
-app.controller('CodeCtrl', controllers.CodeCtrl);

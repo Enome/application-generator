@@ -11,7 +11,8 @@ var directives = {
 
         $el.popover({
           trigger: 'hover',
-          placement: 'right',
+          animation: false,
+          placement: 'bottom',
           title: bundle.name,
           content: bundle.description
         });

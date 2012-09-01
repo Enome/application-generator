@@ -15,26 +15,31 @@
 
   <body>
 
-    <div class='container'>
+    <div class='header'>
+      <h1>App.js Generator</h1>
+    </div>
+
+    <div class='container' ng-controller='BundleCtrl'>
 
       <div class='row'>
 
         <div class='span6'>
 
-          <ul class='bundles row' ng-controller='BundleCtrl'>
+          <h2>Requirements</h2>
 
-            <li class='bundle span2' ng-repeat='bundle in bundles' ng-click='select(bundle)'>
-              <div popover='bundle'>
+          <ul class='bundles row'>
+            <li class='span2' ng-repeat='bundle in bundles' ng-click='select(bundle)'>
+              <div ng-class='getClass(bundle)' class='bundle' popover='bundle'>
                 {{bundle.name}}
               </div>
             </li>
-
           </ul>
 
         </div>
 
         <div class='span6'>
-          <pre ng-controller='CodeCtrl'>{{code}}</pre>
+          <h2>App.js</h2>
+          <pre ng-repeat='bundle in bundles | selected'>{{bundle.code}}</pre>
         </div>
 
       </div>

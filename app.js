@@ -473,47 +473,29 @@ require.define("/controllers.js",function(require,module,exports,__dirname,__fil
 
 var controllers = {
 
-  BundleCtrl: function ($scope, events) {
+  BundleCtrl: function ($scope) {
+
+    bundles.sort(function (a, b) {
+      return a.order > b.order;
+    });
 
     $scope.bundles = bundles;
 
     $scope.select = function (bundle) {
       bundle.selected = !bundle.selected;
-      events.emit('bundle selected', bundle);
     };
-  },
 
-  CodeCtrl: function ($scope, events) {
-
-    var i;
-    var stack = [];
-
-    var render = function () {
-
-      $scope.code = '';
-
-      stack.sort(function (a, b) {
-        return a.order > b.order;
-      });
-
-
-      for (i = 0; i < stack.length; i += 1) {
-        $scope.code += stack[i].code;
+    $scope.getClass = function (bundle) {
+      if (bundle.required) {
+        return 'required';
       }
-
-    };
-
-
-    events.on('bundle selected', function (e, bundle) {
 
       if (bundle.selected) {
-        stack.push(bundle);
-      } else {
-        stack.splice(stack.indexOf(bundle), 1);
+        return 'selected';
       }
 
-      render();
-    });
+      return '';
+    };
 
   }
 
@@ -525,18 +507,19 @@ module.exports = controllers;
 require.define("/bundles/index.js",function(require,module,exports,__dirname,__filename,process){module.exports = [
   require('./express'),
   require('./http'),
-  require('./router')
+  require('./router'),
+  require('./session')
 ];
 });
 
 require.define("/bundles/express.js",function(require,module,exports,__dirname,__filename,process){var bundle = {
   order: 0,
+  required: true,
   name: 'Express.js',
   description: 'The framework',
   code: '// Create the app \n' +
         'var express = require("express"); \n' +
-        'var app = express(); \n' +
-        '\n'
+        'var app = express();'
 };
 
 module.exports = bundle;
@@ -544,12 +527,12 @@ module.exports = bundle;
 
 require.define("/bundles/http.js",function(require,module,exports,__dirname,__filename,process){var bundle = {
   order: 99,
+  required: true,
   name: 'HTTP Server',
   description: 'An Express.js app is a handler for a Node.js http server.',
   code: '// Create a http server and listen to port 3000\n' +
         'var http = require("http"); \n' +
-        'http.createServer(app).listen(3000) \n' +
-        '\n'
+        'http.createServer(app).listen(3000)'
 };
 
 module.exports = bundle;
@@ -564,8 +547,22 @@ require.define("/bundles/router.js",function(require,module,exports,__dirname,__
         '// Create a simple route\n ' +
         'app.get("/", function (req, res) { \n' +
         '  res.send("root"); \n' +
-        '});\n' +
-        '\n'
+        '});'
+};
+
+module.exports = bundle;
+});
+
+require.define("/bundles/session.js",function(require,module,exports,__dirname,__filename,process){var bundle = {
+  order: 10,
+  name: 'Router',
+  description: 'The router middleware is middleware that can execute one or more middleware for a certain url/route',
+  code: '// Use the app.router middleware \n ' +
+        'app.use(app.router); \n\n ' +
+        '// Create a simple route\n ' +
+        'app.get("/", function (req, res) { \n' +
+        '  res.send("root"); \n' +
+        '});'
 };
 
 module.exports = bundle;
@@ -584,7 +581,8 @@ require.define("/directives.js",function(require,module,exports,__dirname,__file
 
         $el.popover({
           trigger: 'hover',
-          placement: 'right',
+          animation: false,
+          placement: 'bottom',
           title: bundle.name,
           content: bundle.description
         });
@@ -601,27 +599,24 @@ require.define("/directives.js",function(require,module,exports,__dirname,__file
 module.exports = directives;
 });
 
-require.define("/events.js",function(require,module,exports,__dirname,__filename,process){var events = function ($rootScope) {
+require.define("/filters.js",function(require,module,exports,__dirname,__filename,process){var filters = {
 
-  return {
-
-    on: function (event, handler) {
-      $rootScope.$on(event, handler);
-    },
-
-    emit: function (event, msg) {
-      $rootScope.$emit(event, msg);
-    }
-
-  };
+  selected: function () {
+    return function (input) {
+      if (input.selected) {
+        return input;
+      }
+    };
+  }
 
 };
 
-module.exports = events;
+module.exports = filters;
 });
 
 require.define("/index.js",function(require,module,exports,__dirname,__filename,process){var controllers = require('./controllers');
 var directives = require('./directives');
+var filters = require('./filters');
 
 var app = angular.module('xgen', []);
 
@@ -629,14 +624,13 @@ var app = angular.module('xgen', []);
 
 app.directive('popover', directives.popover);
 
-// Services
+// Filters
 
-app.factory('events', require('./events'));
+app.filter('selected', filters.selected);
 
 // Controllers
 
 app.controller('BundleCtrl', controllers.BundleCtrl);
-app.controller('CodeCtrl', controllers.CodeCtrl);
 });
 require("/index.js");
 })();

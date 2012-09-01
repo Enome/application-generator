@@ -1,12 +1,56 @@
 body {
   font-family: 'Open Sans';           
+  padding: 0;
 }
 
-ul.bundles {
+h1, h2 {
+  font-weight: 300;
+  margin: 0;
+}
+
+h2 {
+  margin-bottom: 1em;
+}
+
+pre {
+  padding: 20px;
+}
+
+.header {
+  background-color: #323232;
+  padding: 20px;
+  color: white;
+  margin-bottom: 2em;
+}
+
+.bundles {
   padding: 0;
   list-style-type: none;
 }
 
-.bundle {
+.bundles .bundle {
+  padding: 10px;
+  margin-bottom: 20px;
+
   background: whitesmoke;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  height: 80px;
+  line-height: 80px;
+}
+
+.bundle:hover {
+  background: gray;
+  color: white;
+}
+
+.bundle.selected {
+  background: #FF002A;
+  color: white;
+}
+
+.bundle.required {
+  background: black;
+  color: white;
 }
