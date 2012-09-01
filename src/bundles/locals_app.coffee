@@ -14,8 +14,8 @@ bundle = {
         // Variable
         app.locals.variable = 'foobar';
 
-        // Helper
-        app.locals.helper = function () {
+        // Function
+        app.locals.function = function () {
           return 'foobar'
         };
         """

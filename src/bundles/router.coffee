@@ -7,12 +7,8 @@ bundle = {
                """
 
   code: """
+        // Use the router middleware
         app.use(app.router);
-
-        // Create a simple route
-        app.get("/", function (req, res) {
-          res.send("root");
-        });
         """
 }
 

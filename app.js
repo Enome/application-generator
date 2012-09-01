@@ -519,8 +519,11 @@ require.define("/bundles/index.js",function(require,module,exports,__dirname,__f
   require('./cookies'),
   require('./sessions_cookie'),
   require('./locals_app'),
+  require('./locals_middleware'),
+  require('./middleware'),
   require('./router'),
-  require('./locals_route'),
+  require('./route_simple'),
+  require('./route_multiple'),
   require('./errors'),
   require('./404'),
   require('./http'),
@@ -623,7 +626,35 @@ require.define("/bundles/locals_app.coffee",function(require,module,exports,__di
   bundle = {
     name: 'Locals (app)',
     description: "You can use app.locals to create a function or \nvariable that is available in your middleware,\nroutes and views.\n<br /><br /> \nThe functions can't use callbacks and don't \nhave access to the request or the response objects. \nThey are also called helpers.",
-    code: "// Variable\napp.locals.variable = 'foobar';\n\n// Helper\napp.locals.helper = function () {\n  return 'foobar'\n};"
+    code: "// Variable\napp.locals.variable = 'foobar';\n\n// Function\napp.locals.function = function () {\n  return 'foobar'\n};"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/locals_middleware.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    name: 'Locals (middleware)',
+    description: "You can use res.locals to create a function or \nvariable that is available in your routes and views.\n<br /><br /> \nThe functions can't use callbacks but they do\nhave access to the request and the response objects. \nIn 2.x these were called dynamic helpers.\n<br /><br />\n<span class='label label-important'>Needs middleware</span>",
+    code: "app.use(function (req, res, next) {\n  // Variable\n  res.locals.variable = 'foobar';\n\n  // Function\n  res.locals.function = function (param) {\n    return param + req.url;\n  };\n\n  next();\n});"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/middleware.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    name: 'Middleware',
+    description: "Middleware is a function that takes 3 parameters:\nrequest, response and next. These \nfunctions are inside a stack. When a request\nis made it starts with the first function in \nthe stack. When you call next the following \nfunction is executed.\n<br /><br />\nIf you call next with a parameter the request\nand response is passed to error middleware \n(see Error Handler).",
+    code: "// Middleware\napp.use(function(req, res, next){\n  // do something with the request or response\n  next();\n});\n\n// Middleware with error\napp.use(function(req, res, next){\n  // do something with the request or response\n  next('something went wrong');\n});"
   };
 
   module.exports = bundle;
@@ -637,7 +668,7 @@ require.define("/bundles/router.coffee",function(require,module,exports,__dirnam
   bundle = {
     name: 'Router',
     description: "The app.router is middleware that can execute \none or more middleware for a certain url.",
-    code: "app.use(app.router);\n\n// Create a simple route\napp.get(\"/\", function (req, res) {\n  res.send(\"root\");\n});"
+    code: "// Use the router middleware\napp.use(app.router);"
   };
 
   module.exports = bundle;
@@ -645,13 +676,27 @@ require.define("/bundles/router.coffee",function(require,module,exports,__dirnam
 }).call(this);
 });
 
-require.define("/bundles/locals_route.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+require.define("/bundles/route_simple.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
   var bundle;
 
   bundle = {
-    name: 'Locals (route)',
-    description: "You can use res.locals to create a function or \nvariable that is available in your routes and views.\n<br /><br /> \nThe functions can't use callbacks and but they do\nhave access to the request and the response objects. \nIn 2.x these were called dynamic helpers.\n<br /><br />\n<span class='label label-important'>Needs router</span>",
-    code: "app.get('/', function (req, res, next) {\n  // Variable\n  res.locals.variable = 'foobar';\n\n  // Helper\n  res.locals.helper = function () {\n    return req.url;\n  };\n});"
+    name: 'Route (Simple)',
+    description: "A route has a url and one or more middleware. You add\na route to your app by using app.&lt;http_verb&gt;.\n<br /><br />\n<span class='label label-important'>Needs router</span>",
+    code: "// Get route with one middleware\napp.get(\"/\", function (req, res) {\n  res.send(\"root\");\n});"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/route_multiple.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    name: 'Route (Multiple)',
+    description: "A route has a url and one or more middleware. You add\na route to your app by using app.&lt;http_verb&gt;.\n<br /><br />\n<span class='label label-important'>Needs router</span>",
+    code: "// Get route with multiple middleware\napp.get(\"/\", function (req, res, next) {\n  // Do something with request or response\n  next();\n}, function (req, res) {\n  res.render('view');\n});"
   };
 
   module.exports = bundle;
@@ -717,7 +762,6 @@ require.define("/directives.js",function(require,module,exports,__dirname,__file
         $el.popover({
           trigger: 'hover',
           animation: false,
-          placement: 'bottom',
           title: bundle.name,
           content: bundle.description
         });
