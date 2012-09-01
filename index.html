@@ -30,10 +30,14 @@
           <h2>Requirements</h2>
 
           <ul class='bundles row'>
-            <li class='span2' ng-repeat='bundle in bundles | orderBy:"order"' ng-click='select(bundle)'>
-              <div ng-class='getClass(bundle)' class='bundle' popover='bundle'>
+            <li class='span2' ng-repeat='bundle in bundles | orderBy:"order"'>
+              <div ng-class='getClass(bundle)' class='bundle' popover='bundle' ng-click='select(bundle)'>
                 {{bundle.name}}
               </div>
+
+              <a title='info' class='info' ng-href='{{bundle.link}}' ng-show='hasLink(bundle)' target='_blank'>
+                <i class='icon-info-sign'></i>
+              </a>
             </li>
           </ul>
 

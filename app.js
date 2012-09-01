@@ -493,6 +493,11 @@ var controllers = {
       return '';
     };
 
+    $scope.hasLink = function (bundle) {
+      console.log(bundle.link);
+      return typeof bundle.link !== 'undefined';
+    };
+
     for (var i = 0; i < $scope.bundles.length; i++) {
       var current = $scope.bundles[i];
       if (current.required) {
@@ -510,7 +515,10 @@ module.exports = controllers;
 require.define("/bundles/index.js",function(require,module,exports,__dirname,__filename,process){module.exports = [
   require('./express'),
   require('./http'),
-  require('./router')
+  require('./router'),
+  require('./cookies'),
+  require('./sessions_cookie'),
+  require('./forms')
 ];
 });
 
@@ -554,6 +562,54 @@ require.define("/bundles/router.coffee",function(require,module,exports,__dirnam
     name: 'Router',
     description: "The app.router is middleware that can execute \none or more middleware for a certain url.",
     code: "app.use(app.router);\n\n// Create a simple route\napp.get(\"/\", function (req, res) {\n  res.send(\"root\");\n});"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/cookies.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    order: 2,
+    name: 'Cookies',
+    link: 'http://www.senchalabs.org/connect/cookieParser.html',
+    description: "Parse Cookie header and populate req.cookies\nwith an object keyed by the cookie names. Optionally\nyou may enabled signed cookie support by passing\na secret string, which assigns req.secret so\nit may be used by other middleware.",
+    code: "// Use the cookieParser middleware\napp.use(express.cookieParser());"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/sessions_cookie.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    order: 3,
+    link: 'http://www.senchalabs.org/connect/cookieSession.html',
+    name: 'Sessions (cookies)',
+    description: "This enables req.session for storing data outside\nthe request / response cycle. The cookie session \nmiddleware will store data inside a cookie.\n<br /><br />\n<strong>This depends on the cookieParse (Cookies) middleware.</strong>",
+    code: "app.use(express.cookieSession({\n  secret: \"MyLittleSecret\" \n}));"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/forms.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    order: 1,
+    name: 'Forms',
+    link: 'http://expressjs.com/api.html#req.body',
+    description: "Parse request bodies, supports application/json,\napplication/x-www-form-urlencoded, and multipart/form-data.",
+    code: "// Use the bodyParser middleware.\napp.use(express.bodyParser());"
   };
 
   module.exports = bundle;

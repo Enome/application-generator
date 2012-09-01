@@ -22,6 +22,11 @@ var controllers = {
       return '';
     };
 
+    $scope.hasLink = function (bundle) {
+      console.log(bundle.link);
+      return typeof bundle.link !== 'undefined';
+    };
+
     for (var i = 0; i < $scope.bundles.length; i++) {
       var current = $scope.bundles[i];
       if (current.required) {
