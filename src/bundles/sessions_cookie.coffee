@@ -7,7 +7,7 @@ bundle = {
                the request / response cycle. The cookie session 
                middleware will store data inside a cookie.
                <br /><br />
-               <strong>This depends on the cookieParse (Cookies) middleware.</strong>
+               <span class='label label-important'>Needs Cookies</span>
                """
 
   code: """

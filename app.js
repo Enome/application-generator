@@ -513,11 +513,16 @@ module.exports = controllers;
 
 require.define("/bundles/index.js",function(require,module,exports,__dirname,__filename,process){module.exports = [
   require('./express'),
+  require('./static'),
   require('./forms'),
   require('./templates'),
   require('./cookies'),
   require('./sessions_cookie'),
+  require('./locals_app'),
   require('./router'),
+  require('./locals_route'),
+  require('./errors'),
+  require('./404'),
   require('./http'),
 ];
 });
@@ -530,6 +535,21 @@ require.define("/bundles/express.coffee",function(require,module,exports,__dirna
     name: 'The App',
     description: "The express() function creates an application (app). \nEach project needs atleast one these",
     code: "// The App\nvar express = require(\"express\");\nvar app = express();"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/static.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    name: 'Css / Images / Js',
+    link: 'http://www.senchalabs.org/connect/static.html',
+    description: "Middleware that lets you serve static files\nfrom a directory. Use this for css, images\nor client-side Javascript.",
+    code: "// Use static middleware\napp.use(express.static(__dirname + '/public'));"
   };
 
   module.exports = bundle;
@@ -573,7 +593,7 @@ require.define("/bundles/cookies.coffee",function(require,module,exports,__dirna
   bundle = {
     name: 'Cookies',
     link: 'http://www.senchalabs.org/connect/cookieParser.html',
-    description: "Parse Cookie header and populate req.cookies\nwith an object keyed by the cookie names. Optionally\nyou may enabled signed cookie support by passing\na secret string, which assigns req.secret so\nit may be used by other middleware.",
+    description: "Parse Cookie header and populate req.cookies\nwith an object keyed by the cookie names.",
     code: "// Use the cookieParser middleware\napp.use(express.cookieParser());"
   };
 
@@ -588,8 +608,22 @@ require.define("/bundles/sessions_cookie.coffee",function(require,module,exports
   bundle = {
     link: 'http://www.senchalabs.org/connect/cookieSession.html',
     name: 'Sessions (cookies)',
-    description: "This enables req.session for storing data outside\nthe request / response cycle. The cookie session \nmiddleware will store data inside a cookie.\n<br /><br />\n<strong>This depends on the cookieParse (Cookies) middleware.</strong>",
+    description: "This enables req.session for storing data outside\nthe request / response cycle. The cookie session \nmiddleware will store data inside a cookie.\n<br /><br />\n<span class='label label-important'>Needs Cookies</span>",
     code: "app.use(express.cookieSession({\n  secret: \"MyLittleSecret\" \n}));"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/locals_app.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    name: 'Locals (app)',
+    description: "You can use app.locals to create a function or \nvariable that is available in your middleware,\nroutes and views.\n<br /><br /> \nThe functions can't use callbacks and don't \nhave access to the request or the response objects. \nThey are also called helpers.",
+    code: "// Variable\napp.locals.variable = 'foobar';\n\n// Helper\napp.locals.helper = function () {\n  return 'foobar'\n};"
   };
 
   module.exports = bundle;
@@ -604,6 +638,49 @@ require.define("/bundles/router.coffee",function(require,module,exports,__dirnam
     name: 'Router',
     description: "The app.router is middleware that can execute \none or more middleware for a certain url.",
     code: "app.use(app.router);\n\n// Create a simple route\napp.get(\"/\", function (req, res) {\n  res.send(\"root\");\n});"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/locals_route.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    name: 'Locals (route)',
+    description: "You can use res.locals to create a function or \nvariable that is available in your routes and views.\n<br /><br /> \nThe functions can't use callbacks and but they do\nhave access to the request and the response objects. \nIn 2.x these were called dynamic helpers.\n<br /><br />\n<span class='label label-important'>Needs router</span>",
+    code: "app.get('/', function (req, res, next) {\n  // Variable\n  res.locals.variable = 'foobar';\n\n  // Helper\n  res.locals.helper = function () {\n    return req.url;\n  };\n});"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/errors.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    name: 'Error Handler',
+    link: 'http://expressjs.com/guide.html#error-handling',
+    description: "Error-handling middleware are defined just \nlike regular middleware, however it's\ndefined with with 4 parameters. The extra\nerr parameter holds information about the\nerror.",
+    code: "// Middleware with 4 parameters instead of 3\napp.use(function(err, req, res, next){\n  console.error(err.stack);\n  res.send(500, 'Something broke!');\n});"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/404.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    name: '404 Handler',
+    description: "Middleware is a list of functions that get \nexecuted in order. If no middleware is ending\nthe response it will look like the request is\nhanging.\n<br /><br />\nTo prevent this you you need to make the last middleware\nin the stack end the response with a 404 message.",
+    code: "// Middleware with 4 parameters instead of 3\napp.use(function(req, res, next){\n  res.send(404, 'page not found');\n});"
   };
 
   module.exports = bundle;
