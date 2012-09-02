@@ -725,7 +725,7 @@ require.define("/bundles/404.coffee",function(require,module,exports,__dirname,_
   bundle = {
     name: '404 Handler',
     description: "Middleware is a list of functions that get \nexecuted in order. If no middleware is ending\nthe response it will look like the request is\nhanging.\n<br /><br />\nTo prevent this you you need to make the last middleware\nin the stack end the response with a 404 message.",
-    code: "// Middleware with 4 parameters instead of 3\napp.use(function(req, res, next){\n  res.send(404, 'page not found');\n});"
+    code: "app.use(function(req, res, next){\n  res.send(404, 'page not found');\n});"
   };
 
   module.exports = bundle;

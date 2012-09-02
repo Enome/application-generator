@@ -11,7 +11,6 @@ bundle = {
                """
 
   code: """
-        // Middleware with 4 parameters instead of 3
         app.use(function(req, res, next){
           res.send(404, 'page not found');
         });
