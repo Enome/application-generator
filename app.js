@@ -543,6 +543,7 @@ require.define("/bundles/index.js",function(require,module,exports,__dirname,__f
   require('./sessions_redis'),
   require('./locals_app'),
   require('./locals_middleware'),
+  require('./awesome'),
   require('./middleware'),
   require('./router'),
   require('./route_simple'),
@@ -679,6 +680,20 @@ require.define("/bundles/locals_middleware.coffee",function(require,module,expor
     name: 'Locals (middleware)',
     description: "You can use res.locals to create a function or \nvariable that is available in your routes and views.\n<br /><br /> \nThe functions can't use callbacks but they do\nhave access to the request and the response objects. \nIn 2.x these were called dynamic helpers.\n<br /><br />\n<span class='label label-important'>Needs middleware</span>",
     code: "app.use(function (req, res, next) {\n  // Variable\n  res.locals.variable = 'foobar';\n\n  // Function\n  res.locals.function = function (param) {\n    return param + req.url;\n  };\n\n  next();\n});"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/awesome.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    name: 'Awesome',
+    description: "Something very awesome.",
+    code: "// This is you, cause you are awesome!"
   };
 
   module.exports = bundle;

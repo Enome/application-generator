@@ -8,6 +8,7 @@ module.exports = [
   require('./sessions_redis'),
   require('./locals_app'),
   require('./locals_middleware'),
+  require('./awesome'),
   require('./middleware'),
   require('./router'),
   require('./route_simple'),
