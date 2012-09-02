@@ -5,6 +5,7 @@ module.exports = [
   require('./templates'),
   require('./cookies'),
   require('./sessions_cookie'),
+  require('./sessions_redis'),
   require('./locals_app'),
   require('./locals_middleware'),
   require('./middleware'),

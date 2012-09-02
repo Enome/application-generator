@@ -540,6 +540,7 @@ require.define("/bundles/index.js",function(require,module,exports,__dirname,__f
   require('./templates'),
   require('./cookies'),
   require('./sessions_cookie'),
+  require('./sessions_redis'),
   require('./locals_app'),
   require('./locals_middleware'),
   require('./middleware'),
@@ -635,6 +636,21 @@ require.define("/bundles/sessions_cookie.coffee",function(require,module,exports
     name: 'Sessions (cookies)',
     description: "This enables req.session for storing data outside\nthe request / response cycle. The cookie session \nmiddleware will store data inside a cookie.\n<br /><br />\n<span class='label label-important'>Needs Cookies</span>",
     code: "app.use(express.cookieSession({\n  secret: \"MyLittleSecret\" \n}));"
+  };
+
+  module.exports = bundle;
+
+}).call(this);
+});
+
+require.define("/bundles/sessions_redis.coffee",function(require,module,exports,__dirname,__filename,process){(function() {
+  var bundle;
+
+  bundle = {
+    name: 'Sessions (redis)',
+    link: 'https://github.com/visionmedia/connect-redis',
+    description: "This enables req.session for storing data outside\nthe request / response cycle. The redis session \nmiddleware will store data inside redis.\n<br /><br />\n<span class='label label-warning'>Needs redis</span>",
+    code: "var RedisStore = require('connect-redis')(express);\n\napp.use(express.session({ \n  store: new RedisStore,\n  secret: 'MyLittleSecret' \n}));"
   };
 
   module.exports = bundle;
