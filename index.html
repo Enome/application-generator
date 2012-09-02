@@ -47,6 +47,7 @@
         <div class='span6'>
           <h2>App.js</h2>
           <pre ng-repeat='bundle in bundles | filter: { selected: true }'>{{bundle.code}}</pre>
+          <a class='btn btn-inverse' ng-href='data:text/plain;charset=utf-8;base64,{{code}}' download='app.js'>Download <i class='icon-download-alt icon-white'></i></a>
         </div>
 
       </div>
